@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="EN">
+<head>
+    <title>Hello World</title>
+</head>
+<body>
+    <h1>Hello World</h1>
+    <script>
+
+var pointGeoJson = {
+type: "FeatureCollection",
+features: [
+  {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [100.05462, 16.5485],
+    },
+    properties: {
+      name: "Point A",
+    },
+  },
+  {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [101.254, 16.54245],
+    },
+    properties: {
+      name: "Point B",
+    },
+  },
+],
+};
+console.log(pointGeoJson);
+console.log(pointGeoJson.features[0].properties.name);
+console.log(pointGeoJson.features[0].geometry.coordinates);
+
+var coorAll = pointGeoJson.features.map((item) => {
+return item.geometry.coordinates;
+});
+console.log(coorAll);
+
+var filterPoint = pointGeoJson.features.filter((item) => {
+return item.properties.name.includes("B");
+});
+console.log(filterPoint);
+    </script>
+</body>
+</html>

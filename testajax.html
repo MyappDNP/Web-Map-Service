@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //ดึง API จาก nodeJS
+        function getdata() {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: 'http://localhost:3000/api/pgconnect/getplkamp',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        resolve(data);
+                    },
+                    error: function (xhr, status, error) {
+                        reject(error);
+                    }
+                });
+            });
+        }
+
+        function getampquery() {
+return new Promise(function (resolve, reject) {
+    $.ajax({
+        url: 'http://localhost:3000/api/pgconnect/querypop',
+        method: 'POST',
+        dataType: 'json',
+        data: {
+            year: '49',
+            op: 'lt',
+            value: 70000
+        },
+        success: function (data) {
+            resolve(data);
+        },
+        error: function (xhr, status, error) {
+            reject(error);
+        }
+    });
+});
+}
+
+
+        getdata().then((rt) => {
+            console.log(rt);
+        })
+        
+     
+        
+    </script>
+</body>
+</html>

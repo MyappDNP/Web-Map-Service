@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <style>
+        #mapid {
+            height: 800px;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div id="mapid"></div>
+    <script>
+
+        //--Functions------
+        function getampphoeall() {
+return new Promise(function (resolve, reject) {
+    $.ajax({
+        url: `http://localhost:3000/api/pgconnect/getplkampall`,
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            resolve(data);
+        },
+        error: function (xhr, status, error) {
+            reject(error);
+        }
+    });
+});
+}
+
+        //-- Map components-------
+        var map = L.map("mapid").setView(
+            [16.835386696926115, 100.25603046264185],
+            10
+        );
+        var osm = L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        ).addTo(map);
+        map.doubleClickZoom.disable();
+        var gSat = L.tileLayer(
+            "http://mt1.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}",
+            {
+                maxZoom: 20,
+                attribution: "Google Satellite Tile Map",
+            }
+        );
+        var baseMaps = {
+            OSM: osm,
+            GoogleSat: gSat,
+        };
+       
+
+        var overlayLayers = {};
+      //  L.control.layers(baseMaps).addTo(map);
+        
+      var ampAllPromise = getampphoeall().then((rt) => {
+        var ampGroup = L.layerGroup();
+        for (let i in rt) {
+        amp = JSON.parse(rt[i]['gjson']);
+        ampGroup.addLayer(L.geoJSON(amp, {
+        onEachFeature: (feature, layer) => {
+            layer.bindPopup(rt[i].name_th);
+
+        }
+    }));
+}
+ //Add WMS From GeoServer
+ var travel =
+L.tileLayer.wms('http://localhost:8080/geoserver/training2567/wms?', {
+ layers: 'training2567:จุดแหล่งท่องเที่ยว',
+ format: 'image/png',
+ //opacity: 0.5,
+ transparent:true,
+ tiled: 'true'
+ }); 
+
+  //Add WMS From GeoServer
+  var n_park =
+L.tileLayer.wms('http://localhost:8080/geoserver/training2567/wms?', {
+ layers: 'training2567:national_park',
+ format: 'image/png',
+ //opacity: 0.5,
+ transparent:true,
+ tiled: 'true'
+ }); 
+
+   //Add WMS From GeoServer
+   var b_park =
+L.tileLayer.wms('http://localhost:8080/geoserver/nationalpark/wms?', {
+ layers: 'nationalpark:-18-1-2566-orthophoto',
+ format: 'image/png',
+ //opacity: 0.5,
+ transparent:true,
+ tiled: 'true'
+ }); 
+ b_park.on('add', function() {
+    // When the tile layer is added, set the view to the specified coordinates
+    map.setView([16.871, 100.835], 16);
+});
+
+overlayLayers['แนวเขตอุทยานแห่งชาติ'] = ampGroup;
+overlayLayers['แนวเขตอุทยานแห่งชาติ QGIS'] = n_park.addTo(map);
+overlayLayers['แหล่งท่องเที่ยว'] = travel;
+overlayLayers['น้ำตกแก่งโสภา'] = b_park.addTo(map);
+})
+Promise.all([ampAllPromise]).then(() => {
+L.control.layers(baseMaps, overlayLayers).addTo(map);
+});
+    </script>
+
+</body>
+
+</html>

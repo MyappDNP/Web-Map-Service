@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+
+    <title>Document</title>
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            margin: 0px;
+            height: 100%;
+        }
+        #map {
+            height: 100%;
+        }
+        /* Override Leaflet popup styles */
+        .leaflet-popup-content-wrapper {
+            width: 100%;
+        }
+        .leaflet-popup-content {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+    var map = L.map('map').setView([14.41000, 101.55000], 6); // Default view
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    // Define custom icons for different status values
+    var iconStatus1 = L.icon({
+        iconUrl: '/nationalpark/map/icon/เขื่อน-อ่างเก็บน้ำ.png', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus2 = L.icon({
+        iconUrl: '/nationalpark/map/icon/จุดชมทิวทัศน์.jpg', // URL to the marker icon image for status 2
+        iconSize: [25, 25],
+        iconAnchor: [12, 41],
+        popupAnchor: [0, -41]
+    });
+
+   var iconStatus3 = L.icon({
+        iconUrl: '/nationalpark/map/icon/ชายหาด-เกาะ-อ่าว.png', // URL to the marker icon image for status 3
+        iconSize: [25, 25],
+        iconAnchor: [12, 41],
+        popupAnchor: [0, -41]
+    });
+
+    var iconStatus4 = L.icon({
+        iconUrl: '/nationalpark/map/icon/ถ้ำ.png', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus5 = L.icon({
+        iconUrl: '/nationalpark/map/icon/ท่าเรือ.png', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus6 = L.icon({
+        iconUrl: '/nationalpark/map/icon/ธรณีสัณฐาน.jpg', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus7 = L.icon({
+        iconUrl: '/nationalpark/map/icon/น้ำตก.jpg', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus8 = L.icon({
+        iconUrl: '/nationalpark/map/icon/บ่อน้ำ.jpg', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus9 = L.icon({
+        iconUrl: '/nationalpark/map/icon/บ่อน้ำพุร้อน.png', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus10 = L.icon({
+        iconUrl: '/nationalpark/map/icon/โบราณสถาน-ศิลปวัฒนธรรม.png', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus11 = L.icon({
+        iconUrl: '/nationalpark/map/icon/ป่า.jpg', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus12 = L.icon({
+        iconUrl: '/nationalpark/map/icon/แพ.png', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus13 = L.icon({
+        iconUrl: '/nationalpark/map/icon/ภูเขา.png', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus14 = L.icon({
+        iconUrl: '/nationalpark/map/icon/แม่น้ำ-ลำคลอง-ทะเลสาบ.jpg', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus15 = L.icon({
+        iconUrl: '/nationalpark/map/icon/ลานกางเต็นท์.jpg', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus16 = L.icon({
+        iconUrl: '/nationalpark/map/icon/เส้นทางศึกษาธรรมชาติ.png', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatus17 = L.icon({
+        iconUrl: '/nationalpark/map/icon/หน้าผา.png', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+    var iconStatusNull = L.icon({
+        iconUrl: '/nationalpark/map/icon/close.png', // URL to the marker icon image for status 1
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+        popupAnchor: [0, -41] // point from which the popup should open relative to the iconAnchor
+    });
+
+
+        // Load GeoJSON data from URL
+        fetch('/nationalpark/map/park.geojson')
+        .then(response => response.json())
+        .then(data => {
+            // Add GeoJSON layer to the map
+            L.geoJSON(data).addTo(map);
+        })
+
+    // Define an object to hold markers grouped by park
+    var parkMarkers = {};
+
+    // URL of the published Google Sheet containing your data
+    var googleSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR3Fgpk6nAoU9aZ5gFFTjS0g-w0KYu2Vupteakl8QGXGFhB8gvVjv3NIhyoa3NlkSaaNZpsla5KLuSN/pub?gid=1717913443&single=true&output=csv';
+
+    // Fetch data from Google Sheet
+    fetch(googleSheetUrl)
+        .then(response => response.text())
+        .then(data => {
+            // Parse data from CSV format (assuming the Google Sheet is published as CSV)
+            var rows = data.split('\n').slice(1); // Skip header row
+            rows.forEach(row => {
+                var columns = row.split(',');
+                var lat = parseFloat(columns[6]); // Assuming latitude is in the column
+                var lng = parseFloat(columns[7]); // Assuming longitude is in the column
+                var title = columns[1]; // Assuming title is in the third column
+                var park = columns[2];
+                var p_name = columns[4];
+                var status = columns[12].trim(); // Assuming status is in the 13th column
+                var imageUrl = columns[13]; // Assuming image URL is in the 14th column
+                var types = columns[14].trim();
+
+                // Determine which icon to use based on the status value
+                var icon;
+                if (types === 'เขื่อน/อ่างเก็บน้ำ') {
+                    icon = iconStatus1;
+                } else if (types === 'จุดชมทิวทัศน์') {
+                    icon = iconStatus2;
+                } else if (types === 'ชายหาด/เกาะ/อ่าว') {
+                    icon = iconStatus3;
+                } else if (types === 'ถ้ำ') {
+                    icon = iconStatus4;
+                } else if (types === 'ท่าเรือ') {
+                    icon = iconStatus5;
+                } else if (types === 'ธรณีสัณฐาน') {
+                    icon = iconStatus6;
+                } else if (types === 'น้ำตก') {
+                    icon = iconStatus7;
+                } else if (types === 'บ่อน้ำ') {
+                    icon = iconStatus8;
+                } else if (types === 'บ่อน้ำพุร้อน') {
+                    icon = iconStatus9;
+                } else if (types === 'โบราณสถาน/ศิลปวัฒนธรรม') {
+                    icon = iconStatus10;
+                } else if (types === 'ป่า') {
+                    icon = iconStatus11;
+                } else if (types === 'แพ') {
+                    icon = iconStatus12;
+                } else if (types === 'ภูเขา') {
+                    icon = iconStatus13;
+                } else if (types === 'แม่น้ำ/ลำคลอง/ทะเลสาบ') {
+                    icon = iconStatus14;
+                } else if (types === 'ลานกางเต็นท์') {
+                    icon = iconStatus15;
+                } else if (types === 'เส้นทางศึกษาธรรมชาติ') {
+                    icon = iconStatus16;
+                } else if (types === 'หน้าผา') {
+                    icon = iconStatus17;
+                } else {
+                    icon = iconStatusNull;
+                }
+
+                // Create a marker for the current row with the appropriate icon
+                var marker = L.marker([lat, lng], { icon: icon }).bindPopup(`<b>${p_name}</b><br><b>${title}</b><br>${park}<br><b>${status}</b><br><img src="${imageUrl}" alt="Image" style="max-width: 100%; max-height: 100%;">`, {maxWidth: 800});
+                // Group markers by park category
+                if (!parkMarkers[park]) {
+                    parkMarkers[park] = L.layerGroup(); // Create a layer group for the park if it doesn't exist
+                }
+                parkMarkers[park].addLayer(marker).addTo(map); // Add the marker to the corresponding layer group
+                
+                //
+
+                
+            });
+
+        
+            // Add layer control to toggle visibility of markers grouped by park
+            L.control.layers(null, parkMarkers).addTo(map);
+        })
+        .catch(error => console.error('Error fetching or parsing data:', error));
+</script>
+
+</body>
+</html>

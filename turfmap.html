@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+    <title>Document</title>
+    <style>
+        #mapid {
+            height: 800px;
+        }
+    </style>
+</head>
+<body>
+    <div id="mapid"></div>
+    <div>
+        <label for="myRange">กำหนดระยะทาง(km.)</label>
+        <input type="range" min="1" max="50" value="20" class="slider" id="myRange" onchange="buffer_point()">
+        <input type="text" id="dist" value="" disabled>
+    </div>
+    <script>
+        //-- Map components-------
+        var tempLayer = L.layerGroup();
+
+        var map = L.map("mapid").setView(
+            [16.835386696926115, 100.25603046264185],
+            10
+        );
+        var osm = L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        ).addTo(map);
+        map.doubleClickZoom.disable();
+        var gSat = L.tileLayer(
+            "http://mt1.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}",
+            {
+                maxZoom: 20,
+                attribution: "Google Satellite Tile Map",
+            }
+        );
+        var baseMaps = {
+            OSM: osm,
+            GoogleSat: gSat,
+        };
+        var point = turf.point([100.5, 16.4], { name: 'A' });
+console.log(point);
+L.geoJSON(point).addTo(map);
+//
+var linecoor = [
+            [
+                100.18930483993682,
+                16.75642325245495
+            ],
+            [
+                100.1908957750548,
+                16.75565300132034
+            ],
+            [
+                100.19706288309413,
+                16.757330433126256
+            ]
+        ]
+        var line = turf.lineString(linecoor, { name: 'Line1' })
+        L.geoJSON(line).addTo(map);
+
+//
+var polycoor = [[
+            [
+                100.19402581542477,
+                16.748548100269232
+            ],
+            [
+                100.19415933933459,
+                16.748283247959407
+            ],
+            [
+                100.19499386377043,
+                16.748707924760893
+            ],
+            [
+                100.19480788403985,
+                16.74875815528766
+            ],
+            [
+                100.19479834661666,
+                16.74893624523041
+            ],
+            [
+                100.19402581542477,
+                16.748548100269232
+            ]
+        ]];
+        var polygon = turf.polygon(polycoor, { name: 'Poly1' })
+        L.geoJSON(polygon).addTo(map);
+//
+var buff = turf.buffer(point, 10, { unit: 'kilometers' })
+        L.geoJSON(buff).addTo(map);
+        buffer_point();
+//
+var buff = turf.buffer(line, 0.1, { unit: 'kilometers' })
+        L.geoJSON(buff).addTo(map);
+//
+var length = turf.length(line, {units: 'kilometers'});
+console.log(length);
+//
+var area = turf.area(polygon);
+console.log(area);
+
+//
+function buffer_point() {
+            if (tempLayer != null) {
+                tempLayer.clearLayers();
+            }
+            let lat = 16.745970726656527;
+            let lng = 100.19348835785169;
+            let distance = $("#myRange").val();
+            $('#dist').val(distance);
+            var p = turf.point([lng, lat]);
+            L.geoJSON(p).addTo(tempLayer);
+            console.log(distance);
+            buffLayer = turf.buffer(p, distance, { unit: 'kilometers' })
+            L.geoJSON(buffLayer).addTo(tempLayer);
+            //tempLayer.addTo(map);
+            var myIcon = L.icon({
+            iconUrl: 'redloc.png',
+            iconSize: [25, 25],
+            });
+
+            getallpoi().then((rt) => {
+var poi_res = rt.filter((item) => {
+    var p = turf.point([item['lng'], item['lat']]);
+    return turf.booleanWithin(p, buffLayer);
+})
+var pm = poi_res.map((item) => {
+    return L.marker(
+        [item['lat'], item['lng']], { icon: myIcon }
+    ).bindPopup(
+        item['name']
+    ).addTo(tempLayer);
+})
+// console.log(pm);
+tempLayer.addTo(map);
+});
+        }
+//
+function getallpoi() {
+return new Promise(function (resolve, reject) {
+    $.ajax({
+        url: `http://localhost:3000/api/poiservice/getallpoi`,
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            resolve(data);
+        },
+        error: function (xhr, status, error) {
+            reject(error);
+        }
+    });
+});
+}
+////{ permanent: true });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <style>
+        #mapid {
+
+            height: 800px;
+
+        }
+    </style>
+
+    <title>Document</title>
+
+</head>
+
+<body>
+
+    <div id="mapid"></div>
+
+    <script>
+//--Functions------
+function addPointtoDB() {
+var pointdata = {
+    lat: $("#lat").val(),
+    lng: $("#lng").val(),
+    name: $("#name").val(),
+}
+$.ajax({
+    url: `http://localhost:3000/api/poiservice/insertpoint`,
+    method: 'PUT',
+    dataType: 'text',
+    data: pointdata,
+    success: function () {
+        alert('Success!!');
+        for (let i in markerArr) {
+            map.removeLayer(markerArr[i]);
+        }
+       //ใส่เพื่อเพิ่มจุดแล้ว ไม่ต้องรีเฟรส
+        showPoi();
+    },
+    error: function (xhr, status, error) {
+        alert(error);
+    }
+});
+}
+
+//
+function getallpoi() {
+return new Promise(function (resolve, reject) {
+    $.ajax({
+        url: `http://localhost:3000/api/poiservice/getallpoi`,
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            resolve(data);
+        },
+        error: function (xhr, status, error) {
+            reject(error);
+        }
+    });
+});
+}
+
+function showPoi() {
+if (markerG != null) {
+    markerG.clearLayers();
+}
+getallpoi().then((rt) => {
+    for (let i in rt) {
+    
+    var popcont = `
+    <div id='popc'>
+    <p>${rt[i]['gid']}<p>
+    <input type='text' id='nname_${rt[i]['gid']}' value=${rt[i]['name']}> </input><br>
+    <button onclick='updateName(${rt[i]['gid']})'>update</button>
+    <button onclick='deletePoi(${rt[i]['gid']})'>delete</button>
+</div>
+</div>
+`;
+let m = L.marker([rt[i]['lat'], rt[i]['lng']]).bindPopup(popcont);
+
+        markerG.addLayer(m);
+    }
+    markerG.addTo(map);
+    // $("#map").load(window.location.href + " #map");
+});
+
+}
+
+//
+function updateName(id) {
+var nname = $(`#nname_${id}`).val();
+$.ajax({
+    url: `http://localhost:3000/api/poiservice/updatename/${id}/${nname}`,
+    method: 'GET',
+    dataType: 'text',
+    success: function () {
+        alert('Success!!');
+        for (let i in markerArr) {
+            map.removeLayer(markerArr[i]);
+        }
+        showPoi();
+    },
+    error: function (xhr, status, error) {
+        alert(error);
+    }
+});
+}
+
+//
+function deletePoi(id) {
+if (confirm("คุณแน่ใจที่จะลบจุดนี้") == true) {
+    $.ajax({
+        url: `http://localhost:3000/api/poiservice/deletepoint/${id}`,
+        method: 'GET',
+        dataType: 'text',
+        success: function () {
+            // alert('Success!!');
+            for (let i in markerArr) {
+                map.removeLayer(markerArr[i]);
+            }
+            showPoi();
+        },
+        error: function (xhr, status, error) {
+            alert(error);
+        }
+    });
+} else {
+    return;
+}
+}
+
+        //-- Map components-------
+        var markerArr = [];
+        var markerG = L.layerGroup();
+        showPoi();
+
+
+        var map = L.map("mapid").setView(
+            [16.835386696926115, 100.25603046264185],
+            10
+        );
+        var osm = L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        ).addTo(map);
+        map.doubleClickZoom.disable();
+        var gSat = L.tileLayer(
+            "http://mt1.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}",
+            {
+                maxZoom: 20,
+                attribution: "Google Satellite Tile Map",
+            }
+        );
+        var baseMaps = {
+            OSM: osm,
+            GoogleSat: gSat,
+        };
+        L.control.layers(baseMaps).addTo(map);
+
+        map.on('click', (e) => {
+            // console.log(e.latlng.lat); พอคลิกแล้วจุดmarker หาย
+            if (markerArr != null) {
+                for (let i in markerArr) {
+                    map.removeLayer(markerArr[i]);
+                }
+            }
+            //
+            var amarker = L.marker(e.latlng).bindPopup(
+                // `${e.latlng.lat} , ${e.latlng.lng}`
+                `<div>
+                <label for="lat">Lat: </label>
+                <input type="text" id="lat" value=${e.latlng.lat}><br>
+                <label for="lng">Lng: </label>
+                <input type="text" id="lng" value=${e.latlng.lng}><br>
+                <label for="name">ชื่อ: </label>
+                <input type="text" id="name"><br>
+                <input type="button" value="Add Point" onclick='addPointtoDB()'>
+                </div>`
+
+            ).addTo(map).openPopup();
+            markerArr.push(amarker);
+        })
+
+    </script>
+
+</body>
+
+</html>

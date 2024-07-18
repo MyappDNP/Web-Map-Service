@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Hello World</title>
+</head>
+<body>
+    <h1>Hello World</h1>
+    <script>
+      /*  console.log('Hello World!');
+        document.write('Hello World!');
+        alert('Hello World!');*/
+        var myVar = "Hello Javascript";
+
+      console.log(myVar);
+      var myNumber1 = 10;
+
+var myNumber2 = 20;
+console.log(myNumber1);
+
+      console.log(myNumber2);
+
+      var myVar = myNumber1 + myNumber2;
+
+      console.log(myVar);
+
+      var myText = "John" + " " + "Wick";
+
+      console.log(myText);
+
+      var x = "5" + 2 + 3;
+
+      console.log(x);
+
+      var a = true;
+
+      var b = false;
+
+      console.log(a);
+
+      console.log(b);
+
+ 
+
+      var c = undefined;
+
+      var d = null;
+
+      console.log(c);
+
+      console.log(d);
+
+      var a = 10 + 30;
+
+      var b = 30 - 4;
+
+      var c = 4 * 5;
+
+      var d = 50 / 2;
+
+      var e = 40 % 2;
+
+
+      console.log(a);
+
+      console.log(b);
+
+      console.log(c);
+
+      console.log(d);
+
+      console.log(e);
+
+      //1-7
+      var a = 1;
+      a = a + 1;
+      console.log(a);
+      a += 1;
+      console.log(a);
+
+ 
+
+      var b = 4;
+      b -= 3;
+      console.log(b);
+
+
+      var c = 10;
+      c *= 4;
+      console.log(c);
+      var d = 60;
+      d /= 9;
+
+      console.log(d);
+      var e = 54;
+      e %= 5;
+      console.log(e);
+
+      //1-8
+      var a = 10;
+     console.log(a);
+      a++;
+      console.log(a);
+      a--;
+      console.log(a);
+      console.log('-----------');
+
+      var a = 20;
+
+      var b = 10;
+
+      var c = 20;
+
+      console.log(a == b);
+      console.log(a != b);
+      console.log(a > b);
+      console.log(a < b);
+      console.log(a >= b);
+      console.log(a <= b);
+      console.log(a == c);
+      console.log(a != c);
+      console.log(a > c);
+      console.log(a < c);
+      console.log(a >= c);
+      console.log(a <= c);
+      console.log('-----------');
+      
+var a = 10;
+var b = 20;
+var c = 10;
+var d = 30;
+console.log(a > 5 && b < 30); //true && true
+console.log(a > b && a < c); //false && false
+console.log(a > b && c < d); //false && true
+console.log(a < b && c > d); //true && false
+console.log(a > 5 || b < 30); //true || true
+console.log(a > b || a < c); //false || false
+console.log(a > b || c < d); //false || true
+console.log(a < b || c > d); //true || false
+console.log(!(a > b || c < d)); //Not(false || true)
+console.log('-----------');
+
+if (true) {
+console.log("Hello JS condition");
+}
+if (false) {
+console.log("คำสั่งนี้จะไม่่แสดงผล");
+}
+console.log('-----------');
+var a = 65;
+if (a > 50) {
+  console.log("ตัวแปร a มีค่ามากกว่า 50");
+}
+if (a > 50 && a < 70) {
+  console.log("ตัวแปร a อยู่ระหว่าง 51 - 69");
+}
+console.log('-----------');
+
+var a = 65;
+
+      if (a >= 80) {
+
+        console.log("คุณได้เกรด A");
+
+      } else if (a < 80 && a >= 70) {
+
+        console.log("คุณได้เกรด B");
+
+      } else if (a < 70 && a >= 50) {
+
+        console.log("คุณได้เกรด C");
+
+      } else if (a < 50 && a >= 40) {
+
+        console.log("คุณได้เกรด D");
+
+      } else {
+
+        console.log("คุณได้เกรด F");
+
+      }
+      console.log('-----------');
+
+for (var i = 1; i <= 10; i++) {
+document.write("Hello World " + i + "<br>");
+}
+
+for (var i = 0; i < 10; i++) {
+document.write(i + "<br>");
+if (i >= 7) {
+  break;
+}}
+
+for (var i = 0; i < 10; i++) {
+if (i == 7) {
+  continue;
+}
+document.write(i + "<br>");
+}
+console.log('-----------');
+var a = [1, 2, 3, 4, 5];
+var b = [];
+var c = Array("A", "B", "C", "D");
+var d = Array(5);
+var e = new Array("Monitor", "Keyboard", 45, 20, "Mouse");
+      console.log(a);
+      console.log(b);
+      console.log(c);
+      console.log(d);
+      console.log(e);
+
+      var a = [14, 20, 32, 47, 58];
+      console.log("สมาชิกตัวแรกคือ" + a[0]);
+      console.log("สมาชิกตัวที่สองคือ" + a[1]);
+      console.log("สมาชิกตัวที่สามคือ" + a[2]);
+      console.log("สมาชิกตัวที่สี่คือ" + a[3]);
+      console.log("สมาชิกตัวสุดท้ายคือ" + a[4]);
+
+      var a = [14, 20, 32, 47, 58];
+      for (var i in a) {
+        console.log("สมาชิกตัวที่ "+(parseInt(i)+1)+ " คือ " + a[i]);
+
+      }
+      console.log('-----------');
+      var a = [45, 20, 2, 87, 13];
+      a.push(2, 56, 43);
+      console.log(a);
+
+      console.log('-----------');
+var d = "GeoComputation";
+      var e = [...d];
+      console.log(e);
+
+      var f = [4.5, 6.4, 8.4, 2.4];
+      console.log(Math.min(...f));
+      console.log('-----------');
+
+var a = {
+id: 1,
+name: "John",
+age: 43,
+gender: "male",
+};
+console.log(a);          
+console.log(a["name"]);
+console.log(a.name);
+console.log(a.age);
+console.log('-----------');
+
+var b = {
+id: 2,
+name: "Joe",
+age: 21,
+gender: "male",
+location: [16.45354, 100.34545],
+subject: { math: 50, geography: 60 },
+};
+console.log(b);
+console.log(b.location[0]);
+console.log(b.subject.math);
+console.log('-----------');
+
+var b = {
+id: 2,
+name: "Joe",
+age: 21,
+gender: "male",
+location: [16.45354, 100.34545],
+subject: { math: 50, geography: 60 },
+};
+b.height = 180;
+console.log(b);
+
+var b = {
+id: 2,
+name: "Joe",
+age: 21,
+gender: "male",
+location: [16.45354, 100.34545],
+subject: { math: 50, geography: 60 },
+};
+b.subject.geography = 80;
+console.log(b);
+
+var b = {
+id: 2,
+name: "Joe",
+age: 21,
+gender: "male",
+location: [16.45354, 100.34545],
+subject: { math: 50, geography: 60 },
+};
+delete b.location;
+console.log(b);
+    </script>
+</body>
+</html>

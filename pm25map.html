@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+
+    <title>Document</title>
+    <style>
+        html {
+    height: 100%;
+  }
+  body {
+    margin: 0px;
+    height: 100%;
+  }
+  #mapid {
+    height: 100%;
+  }
+    </style>
+</head>
+<body>
+    <div id="mapid"></div>
+    <div><button onclick="interpolate()">Interpolate</button></div>
+
+    <script>
+function getpm25() {
+return new Promise(function (resolve, reject) {
+    $.ajax({
+        url: `http://localhost:3000/api/poiservice/getpm25`,
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            resolve(data);
+        },
+        error: function (xhr, status, error) {
+            reject(error);
+        }
+    });
+});
+}
+//
+function pickIcon(value) {
+if (value > 50) {
+    return L.icon({ iconUrl: './sick1.png', iconSize: [30, 30] });
+}
+else if (value > 30) {
+    return L.icon({ iconUrl: './normal.png', iconSize: [30, 30] });
+}
+else {
+    return L.icon({ iconUrl: './smile.png', iconSize: [30, 30] });
+}
+}
+ 
+        //-- Map components-------
+        var map = L.map("mapid").setView(
+            [16.835386696926115, 100.25603046264185],
+            10
+        );
+        var osm = L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+
+        ).addTo(map);
+        map.doubleClickZoom.disable();
+        var gSat = L.tileLayer(
+            "http://mt1.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}",
+            {
+                maxZoom: 20,
+                attribution: "Google Satellite Tile Map",
+            }
+        );
+        var baseMaps = {
+            OSM: osm,
+            GoogleSat: gSat,
+        };
+       
+getpm25().then((rt) => {
+var pts = rt.map((item) => {
+    return turf.point([item.longitude, item.latitude], { pm25: item.value });
+});
+
+var pm_col = turf.featureCollection(pts);
+        L.geoJSON(pm_col, {
+        pointToLayer: (feature, latlng) => {
+        return L.marker(latlng, {
+            icon: pickIcon(feature.properties.pm25)
+        }).bindTooltip(`${feature.properties.pm25}`); //{ permanent: true });
+         //   }).bindTooltip(`${feature.properties.pm25}`, { permanent: true });
+    }
+}).addTo(map);
+
+});
+
+    </script>
+</body>
+</html>
