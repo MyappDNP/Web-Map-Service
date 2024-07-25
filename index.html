@@ -244,7 +244,7 @@
                 }
 
                 // Create a marker for the current row with the appropriate icon
-                var marker = L.marker([lat, lng], { icon: icon }).bindPopup(`<b>${p_name}</b><br><b>${title}</b><br>${park}<br><b>${status}</b><br><img src="${imageUrl}" alt="Image" style="max-width: 100%; max-height: 100%;"><br><a href="${nplink}">Link ไปยังอุทยาน</a>`, {maxWidth: 800});
+                var marker = L.marker([lat, lng], { icon: icon }).bindPopup(`<b>${p_name}</b><br><b>${title}</b><br>${park}<br><b>${status}</b><br><img src="${imageUrl}" alt="Image" style="max-width: 100%; max-height: 100%;"><br><a href="${nplink}">Link ข้อมูลอุทยานแห่งชาติ</a>`, {maxWidth: 800});
                 // Group markers by park category
                 if (!parkMarkers[park]) {
                     parkMarkers[park] = L.layerGroup(); // Create a layer group for the park if it doesn't exist
