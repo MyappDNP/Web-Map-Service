@@ -201,6 +201,7 @@
                 var status = columns[12].trim(); // Assuming status is in the 13th column
                 var imageUrl = columns[13]; // Assuming image URL is in the 14th column
                 var types = columns[14].trim();
+                var nplink = columns[15];
 
                 // Determine which icon to use based on the status value
                 var icon;
@@ -243,7 +244,7 @@
                 }
 
                 // Create a marker for the current row with the appropriate icon
-                var marker = L.marker([lat, lng], { icon: icon }).bindPopup(`<b>${p_name}</b><br><b>${title}</b><br>${park}<br><b>${status}</b><br><img src="${imageUrl}" alt="Image" style="max-width: 100%; max-height: 100%;">`, {maxWidth: 800});
+                var marker = L.marker([lat, lng], { icon: icon }).bindPopup(`<b>${p_name}</b><br><b>${title}</b><br>${park}<br><b>${status}</b><br><img src="${imageUrl}" alt="Image" style="max-width: 100%; max-height: 100%;"><br><a href="${nplink}">Link ไปยังอุทยาน</a>`, {maxWidth: 800});
                 // Group markers by park category
                 if (!parkMarkers[park]) {
                     parkMarkers[park] = L.layerGroup(); // Create a layer group for the park if it doesn't exist
