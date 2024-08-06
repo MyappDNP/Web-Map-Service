@@ -255,12 +255,12 @@
                 //var marker = L.marker([lat, lng], { icon: icon }).bindPopup(`<b>${p_name}</b><br><b>${title}</b><br>${park}<br><b>${status}</b><br><img src="${imageUrl}" alt="Image" style="max-width: 100%; max-height: 100%;"><br><a href="${nplink}">Link ข้อมูลอุทยานแห่งชาติ</a>`, {maxWidth: 800});
                 
                 var marker = L.marker([lat, lng], { icon: icon })
-            .bindTooltip(p_name, { 
-                permanent: true, 
-                direction: 'bottom', 
+            //.bindTooltip(p_name, { 
+            //    permanent: true, 
+            //    direction: 'bottom', 
                 //className: 'my-tooltip', 
-                offset: [0, -15] // Adjust the offset as needed
-            })
+             //   offset: [0, -15] // Adjust the offset as needed
+            //})
             .bindPopup(`
                 <b>${p_name}</b><br>
                 <b>${title}</b><br>
