@@ -252,7 +252,7 @@
                 if (!parkMarkers[types]) {
                 parkMarkers[types] = L.layerGroup(); // Create a layer group for the park if it doesn't exist
                 }
-                parkMarkers[types].addTo(map); // Add the marker to the corresponding layer group
+                parkMarkers[types].addLayer(marker).addTo(map); // Add the marker to the corresponding layer group
                 
                 //
 
