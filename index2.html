@@ -245,14 +245,14 @@
 
                 var marker = L.marker([lat, lng], { icon: icon }).bindPopup(content);
                 parkMarkers[types] = marker;
-                //marker.addTo(map);
+                marker.addTo(map);
             
 
                 // Group markers by park category
                 if (!parkMarkers[types]) {
                 parkMarkers[types] = L.layerGroup(); // Create a layer group for the park if it doesn't exist
                 }
-                parkMarkers[types].addLayer(marker).addTo(map); // Add the marker to the corresponding layer group
+                parkMarkers[types].addTo(map); // Add the marker to the corresponding layer group
                 
                 //
 
