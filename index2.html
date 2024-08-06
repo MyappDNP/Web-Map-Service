@@ -244,7 +244,7 @@
                 var content = `<h3>${title}</h3><p><b>${park}</b></p><p><b>ชื่อแหล่งท่องเที่ยว:</b> ${p_name}</p><p><b>ประเภท:</b> ${types}</p><p><b>สถานะ:</b> ${status}</p><img src="${imageUrl}" alt="${title}" style="width:100%"><br><a href="${nplink}" target="_blank">ข้อมูลอุทยานแห่งชาติ อ่านเพิ่มเติม</a><br><a href="${navigationUrl}" target="_blank">นำทางด้วย Google Maps</a>`;
 
                 var marker = L.marker([lat, lng], { icon: icon }).bindPopup(content);
-                //parkMarkers[title] = marker;
+                parkMarkers[title] = marker;
                 //marker.addTo(map);
             
 
