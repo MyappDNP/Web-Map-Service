@@ -246,8 +246,25 @@
                 var marker = L.marker([lat, lng], { icon: icon }).bindPopup(content);
                 parkMarkers[title] = marker;
                 marker.addTo(map);
+            
+
+                          // Group markers by park category
+                          if (!parkMarkers[park]) {
+                    parkMarkers[park] = L.layerGroup(); // Create a layer group for the park if it doesn't exist
+                }
+                parkMarkers[park].addLayer(marker).addTo(map); // Add the marker to the corresponding layer group
+                
+                //
+
+                
             });
+
+        
+            // Add layer control to toggle visibility of markers grouped by park
+            L.control.layers(null, parkMarkers).addTo(map);  
+
         });
+        
 </script>
 
 </body>
