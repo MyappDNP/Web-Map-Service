@@ -249,10 +249,10 @@
             
 
                           // Group markers by park category
-                          if (!parkMarkers[types]) {
-                    parkMarkers[types] = L.layerGroup(); // Create a layer group for the park if it doesn't exist
+                          if (!parkMarkers1[types]) {
+                    parkMarkers1[types] = L.layerGroup(); // Create a layer group for the park if it doesn't exist
                 }
-                parkMarkers[types].addTo(map); // Add the marker to the corresponding layer group
+                parkMarkers1[types].addTo(map); // Add the marker to the corresponding layer group
                 
                 //
 
@@ -261,7 +261,7 @@
 
         
             // Add layer control to toggle visibility of markers grouped by park
-            L.control.layers(null, parkMarkers).addTo(map);  
+            L.control.layers(null, parkMarkers1).addTo(map);  
 
         });
         
