@@ -138,11 +138,14 @@
     // Search function to filter markers by park name
     function searchPark() {
         var query = document.getElementById('search-input').value.toLowerCase();
+        console.log('Search query:', query);
         for (var park in parkMarkers) {
             map.removeLayer(parkMarkers[park]); // Remove all markers from the map initially
         }
         for (var park in parkMarkers) {
+            console.log('Checking park:', park);
             if (park.toLowerCase().includes(query)) {
+                console.log('Match found:', park);
                 map.addLayer(parkMarkers[park]); // Add matching markers back to the map
             }
         }
